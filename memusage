@@ -1,0 +1,14 @@
+while true; do
+  mem_Used=$(free -m | head -2 | tail -1 | awk '{print $3}')
+  totalmem=$(free -m | head -2 | tail -1 | awk '{print $2}')
+  memper=$(expr $mem_Used \* 100 / $totalmem)
+
+  echo -e "$(date +"%r %D")\t$memper" >> mem_report.tsv
+
+  if [[ $memper -ge 80 ]]; then
+    echo "Security Alarm for memory" | espeak-ng
+    exit 0
+  fi
+
+  sleep 5
+done
